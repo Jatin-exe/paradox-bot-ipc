@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>HI THIS DASHBOARD BOOBS</h1>
+
+    <h2>The Bot is in: {{guild_count}} servers</h2>
+
+    <h3>Common Guilds</h3>
+
+    <uL>
+        {% for guild in matching %}
+            <li>{{guild.name}}</li>
+        {% endfor %}
+    </uL>
+{% endblock content %}
