@@ -3,8 +3,3 @@ discord-ext-ipc==2.1.1
 discord.py==1.7.3
 quart==0.15.1
 quart-discord==2.1.4
-reuests==2.26.0
-
-
-
-
