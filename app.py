@@ -10,7 +10,7 @@ ipc_client = ipc.Client(secret_key="JATIN")
 app.config["SECRET_KEY"] = "test123" 
 app.config["DISCORD_CLIENT_ID"] = 815136715155963924   # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = "o2nabMufqmu9t7DES-6c7S08Bp15mA2E"                # Discord client secret.
-app.config["DISCORD_REDIRECT_URI"] = "http://3.85.53.85/callback"                 # URL to your callback endpoint.
+app.config["DISCORD_REDIRECT_URI"] = "http://52.3.231.173/callback"                 # URL to your callback endpoint.
 
 discord_token_url = "https://discord.com/api/oauth2/token"
 discord_api_url = "https://discord.com/api"
@@ -83,6 +83,6 @@ async def servers():
 
     return await render_template("dashboard.html", guild_count = guild_count, matching = same_guilds)
 
-
-if __name__ == "__main__":
-    app.run(host="localhost", port=8765, debug=True)
+#NO NEED OF THIS SINCE WE ARE USING HYPERCORN TO DEPLOY BY QUART
+#if __name__ == "__main__":
+#   app.run(host="localhost", port=8080, debug=True) #DEBUG MODE
