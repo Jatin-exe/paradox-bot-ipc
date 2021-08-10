@@ -1,14 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>HI THIS DASHBOARD BOOBS</h1>
+    <h1>Coding Bot Dashboard!</h1>
 
     <h2>The Bot is in: {{guild_count}} servers</h2>
-
-    <h3>Common Guilds</h3>
-
-    <uL>
-        {% for guild in matching %}
-            <li>{{guild.name}}</li>
+    <div class="picker">
+    <h3>Hello, {{username}}! Please select a server to get started</h3>
+    <hr />
+    <section class="cards">
+        {% for guild in guilds %}
+        <div class="card">
+        <a href="/dashboard/{{guild.id}}">
+            {% if guild.icon_url is not none %}
+            <img src="{{guild.icon_url}}" class="{{guild.class_color}}" />
+            {% else %}
+            <!--insert custom image here -->
+            <img
+            src="https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png" 
+            class="{{guild.class_color}}"
+            />
+            {% endif %}
+        </a>
+        <br />
+        {{ guild.name }}
+        </div>
         {% endfor %}
-    </uL>
+    </section>
+    </div>
 {% endblock content %}

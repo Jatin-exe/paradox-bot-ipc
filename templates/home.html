@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>Paradox Bot Home</title>
+
+    <style>
+      button {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 12px;
+      }
+      button:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    </style>
 </head>
 <body>
     <main> 
@@ -26,15 +44,14 @@
         <main> 
             <div class="landing-page">
                 <div class="landing-page--block">
-                    Invite Bot 
-                    Paradox Bot Dashboard
-                     Button if not logged in then login on discord using pop up Window then close popup window and redirecet ot choose Servers
-                    Vote on Top.gg to earn Coins to buy premium version
-    
-                    <a href="#"><button>Invite Bot</button></a>
-                    <a href="#"><button>Dashboard</button></a>
-                    <a href="/login"><button>Click Here To Login</button></a>
-                    <a href="#"><button>Vote For Rewards</button></a>
+
+
+                    {% if not authorized %}
+                    <a href="/login"><button>Login with discord</button></a>
+                    {% else %}
+                    <a href="/dashboard"><button>Open Dashboard</button></a>
+                    {%endif %}
+
     
                 </div>
                 <div class="landing-page--block">
@@ -49,6 +66,15 @@
                     -7 PPL ARE NOT LIKING PARADOXES
                     -Shard INFO
                     -BOT DOWN OR NOT DOWN
+                    Invite Bot 
+                    Paradox Bot Dashboard
+                     Button if not logged in then login on discord using pop up Window then close popup window and redirecet ot choose Servers
+                    Vote on Top.gg to earn Coins to buy premium version
+    
+                    <a href="#"><button>Invite Bot</button></a>
+                    <a href="#"><button>Dashboard</button></a>
+                    <a href="/login"><button>Click Here To Login</button></a>
+                    <a href="#"><button>Vote For Rewards</button></a>
                     
                 </div>
 

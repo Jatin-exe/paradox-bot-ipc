@@ -1,11 +1,14 @@
-from quart import Quart, redirect, url_for , request , session , render_template
+from quart import Quart, redirect, url_for , request , render_template , session
 from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 import requests
 from discord.ext import ipc
 
 
+HOST = "0.0.0.0"
+SECRET_KEY = "JATIN"
+
 app = Quart(__name__)
-ipc_client = ipc.Client(secret_key="JATIN")
+ipc_client = ipc.Client(host=HOST,secret_key=SECRET_KEY)
 
 app.config["SECRET_KEY"] = "test123" 
 app.config["DISCORD_CLIENT_ID"] = 815136715155963924   # Discord client ID.
@@ -65,24 +68,54 @@ async def callback():
 async def redirect_unauthorized(e):
     return redirect(url_for("login"))
 
-
 @app.route("/servers/")
 @requires_authorization
 async def servers():
     print(session["DISCORD_OAUTH2_TOKEN"])
     guild_count = await ipc_client.request("get_guild_count")
-    guild_ids = await ipc_client.request("get_guild_ids") #List of Bot Guilds
-    user_guilds = await discord.fetch_guilds() #Fetching User Guilds
+    guild_ids = await ipc_client.request("get_guild_ids")
 
-    same_guilds = []
+    user_guilds = await discord.fetch_guilds()
+
+    guilds = []
 
     for guild in user_guilds:
-        if guild.id in guild_ids:
-            same_guilds.append(guild)
+        if guild.permissions.administrator:			
+            guild.class_color = "green-border" if guild.id in guild_ids else "red-border"
+            guilds.append(guild)
+
+    guilds.sort(key = lambda x: x.class_color == "red-border")
+    name = (await discord.fetch_user()).name
+    return await render_template("dashboard.html", guild_count = guild_count, guilds = guilds, username=name)
 
 
-    return await render_template("dashboard.html", guild_count = guild_count, matching = same_guilds)
+@app.route("/dashboard/<int:guild_id>")
+@requires_authorization
+async def dashboard_server(guild_id):
+	guild = await ipc_client.request("get_guild", guild_id = guild_id)
+	if guild is None:
+        #Redirect to add the bot in the server!  #change the below perms 8 as u wish 8 == admin 
+		return redirect(f'https://discord.com/oauth2/authorize?&client_id={app.config["DISCORD_CLIENT_ID"]}&scope=bot&permissions=8&guild_id={guild_id}&response_type=code&redirect_uri={app.config["DISCORD_REDIRECT_URI"]}')
+	return guild["name"]
+
+
+
+
+
+
+
 
 #NO NEED OF THIS SINCE WE ARE USING HYPERCORN TO DEPLOY BY QUART
-#if __name__ == "__main__":
-#   app.run(host="localhost", port=8080, debug=True) #DEBUG MODE
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080, debug=True) #DEBUG MODE
+
+#-------------------------------NOTES-------------------------------------------------
+#at login if alr login show mange dashboard instaed of login
+
+
+# BEFORE REDIRECT T AUTHORESE CHEKC IF ARL THERE IN SESSION AND CAN BE ABLE TO BE USED 
+
+#if any case of username chagne or pass then promto to redirect to login 
+
+#error with user redirect to login
+
