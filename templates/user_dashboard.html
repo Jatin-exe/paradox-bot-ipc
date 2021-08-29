@@ -28,22 +28,16 @@
         </section>
     </div>
     <div class="dashboard-sidebar">
-
+        <!--Guild Configs, Moderation, Leveling, Fun  , Utility, Welcome, Backup, Suggestions-->
+        <a href="/dashboard/me"><div class="sidebar-children">Overview</div></a>
+        <a href="/dashboard/me/user_settings"><div class="sidebar-children">Settings</div></a>
+        <a href="/dashboard/me/switch-acc"><div class="sidebar-children">Switch Accounts</div></a>
+        <a href="/dashboard/me/logout"><div class="sidebar-children">Logout</div></a>
         
-        <a href="/dashboard/{{ guild_id }}/overview"><div class="sidebar-children" >General</div></a> <!--add guild here somehow in the url id k-->
-        <a href="/dashboard/{{ guild_id }}/embeds"><div class="sidebar-children" >Embeds</div></a>
-        <a href="/dashboard/{{ guild_id }}/moderation"><div class="sidebar-children" >Moderation</div></a>
-        <a href="/dashboard/{{ guild_id }}/leveling"><div class="sidebar-children" >Leveling</div></a>
-        <a href="/dashboard/{{ guild_id }}/fun"><div class="sidebar-children" >Fun</div></a>
-        <a href="/dashboard/{{ guild_id }}/backup"><div class="sidebar-children" >Backup</div></a>
-        <a href="/dashboard/{{ guild_id }}/premium"><div class="sidebar-children" >Premium</div></a>
-        <a href="/dashboard/{{ guild_id }}/special-guilds"><div class="sidebar-children" >Special cateogry</div></a>
-        <a href="/dashboard/{{ guild_id }}/giveaways"><div class="sidebar-children" >Giveaways</div></a>
-        <a href="/dashboard/{{ guild_id }}/welcome"><div class="sidebar-children" >Welcome</div>       </a>
     </div>
     <div class="dashboard-area">
-        {% block modules %}
-        {% endblock modules %}
+        {% block area %}
+        {% endblock %}
     </div>
 
 </div>

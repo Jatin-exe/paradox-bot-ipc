@@ -4,41 +4,79 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    
+    
+    <!--SEO GOOGLE CONTENT WEBPAGE SEARCH DISPLAY RESULTS , KEYWORRAND MAIN THINGS THAT THE SEARCH ENGINE PARESE THROUGH WHEN SEARCHING FOR WEBPAGES-->
     {% if title %}
-        <title>Paradox Bot - {{ title }}</title>
+    <title>Paradox Bot - {{ title }}</title>
     {% else %}
-        <title>Paradox Bot</title>
+    <title>Paradox Bot</title>
     {% endif %}
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
 </head>
 <body>
     <main> 
+        <div id="logo-outline"></div>
         <!--Header-->
-        <header>
-            <span>
-                Paradox Bot!
-            </span>
-            <span>Login Using Discord</span>
-            <span>Documentation</span>
-            <span>Support Server</span>
-            <span>Tutorials</span>
+        <header id="header">
+            <nav> <!--MEDIA QUERY = BURGER OR OTHER MOBILE FRIENDLY OPETION MAYBE BELOW MENU I DONT LIKE THE BURGERS THEY SUCK BELOW MENU - INSTA TYPE-->
+                <ul>
+                    <li> 
+                        <a href="docs">Docs</a>
+                    </li>
+                    <li>
+                        <a href="server">Support Server</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/paradox-project/">Source- Github</a>
+                    </li>
+                    <li>
+                        <a href="help">Tutorials</a>
+                    </li>
+                    <li>
+                        <a href="top.gg">Vote</a> <!--Top.gg upload-->                   
+                    </li>
+                </ul>
+
+                <div id="user-wrapper">
+                    {% if user %}
+                        <a href="discord.com">{{ user }}</a> <!--OPtions to Logout or have multiple instances drop down whennick and logged in -->
+                    {% else %}
+                        <a href="{{ url_for('login') }}">Login with Discord</a> <!--Discord Logo-->
+
+                    {% endif %}
+                    <div id="user-commnet"></div> <!--user comment-->
+                </div>
+            </nav>
+            <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='logo.png') }}" id="header-logo">
+            </a>
         </header>
-        <nav> 
-            <ul>
-                <li>
-                    <a>Guild Configs</a><!--Guild Configs, Moderation, Leveling, Fun  , Utility, Welcome, Backup, Suggestions-->
-                </li>
-            </ul>
-        </nav>
+
         <div class="container-box">
-            <div class="wrapper">
                 {% block content %}
                 {% endblock %}
-            </div>
         </div>
         <footer>
-
+            <div id="footer-elements">
+                <hr/><!--icon at footer of github, linkedin and server like in that-->
+                Paradox 2020
+            </div>
         </footer>
     </main>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

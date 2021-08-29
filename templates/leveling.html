@@ -1,0 +1,216 @@
+{% extends "/dashboard.html" %} <!--uufor dashbaard-->
+{% block modules %}
+<!--Guild-Channels-in-Order-with-Category-Dividers-->
+<!---Data list-->
+<!--add a special atrribut or tag for cateogry -- so we cna style diffrently and know when it is selected-->
+
+{# Data assingment #}
+{% set no_xp_channels = guild_configs['leveling']['no_xp_channels'] %}
+{% set no_xp_roles = guild_configs['leveling']['no_xp_roles'] %}
+{% set leveling_enabled = guild_configs['leveling']['leveling_enabled'] %}
+{% set xp_rate = guild_configs['leveling']['xp_rate'] %}
+{% set level_reward = guild_configs['leveling']['level_reward'] %}
+{% set len_level = guild_configs['leveling']['len_levels'] %}
+
+{% if len_level is none %}
+    {% set len_level= 0 %}
+{% endif %}
+
+
+<form action="#" method="post">
+    <div class="module-header">
+        <h2>Leveling Settings</h2> 
+
+    </div>
+    <div class="module-info">
+        
+        <h3>Info</h3>
+        <label class="dashboard-switch">
+            <span id="switch-text"><strong>Enabled/Disabled</strong></span>
+            {% if "on" in leveling_enabled %}
+            <input type="checkbox" name="leveling_enabled" action="#" method="post" checked>
+            {% else %}
+                <input type="checkbox" name="leveling_enabled" action="#" method="post">
+            {% endif %}
+            <span class="dashboard-toggle"></span>
+        </label>
+        Having an XP system is a good way to reward your members for their active contribution towards the community
+        - Xp is Gained from 25-50 per minuite to avoid spam on default settings 
+        ^^ Amount of XP given can be increased or decreased by changing the <a href="#xp_rate">xp rate</a> -> link
+        - On Reaching Specific Levels Rewards (Roles, Message) can be given to the user 
+        
+        Premium Users can order custom rewards for their guild specifically 
+        To Get custom rewards or any custom setting that is not already present u can buy the Premium, Our Dev team will design the Custom Settings unique for your guild!
+
+        <small>
+            -YOU CAN JOIN OUR SUPPORT SERER TO DISCUSS THE CUSTOM FEATURES THAT YOU WOULD LIKE BUILT IN THE BOT ( we even accept custom bots from premium users for free)
+        </small>
+    </div>    
+    <hr width= 60% />
+    <div class="module-body">        
+                
+            <fieldset id="leveling-noxp">
+                <legend><h3>Leveling Permissions</h3></legend>
+                <!--fucking change hte ids and mkae it more clena noob-->
+                <label><h4>No XP Channels</h4></label>
+                <div id="no_xp_channels_div">
+                
+                <select  name="no_xp_channels" value="no_xp_channels" multiple="true" class="mul-select">
+                    {% for c_tuple in guild_channels %}
+                        <option class="dropdown-category" value="{{ c_tuple[0][1] }}" name="{{ c_tuple[0][1] }}" disabled>{{ c_tuple[0][0] }}</option>
+                        {% for ch_tuple in c_tuple[1] %}
+                            {% if ch_tuple[1] in no_xp_channels %}
+                                <option class="dropdown-channel" value="{{ ch_tuple[1] }}" name="{{ ch_tuple[1] }}" selected>{{ ch_tuple[0] }}</option>
+                            {% else %}
+                                <option class="dropdown-channel" value="{{ ch_tuple[1] }}" name="{{ ch_tuple[1] }}">{{ ch_tuple[0] }}</option>
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+                </div>
+                
+
+                <label><h4>No XP Roles</h4></label>
+                <select name="no_xp_roles" value="no_xp_roles" multiple="true" class="mul-select">
+                    {% for role_tuple in guild_roles %}
+                        {% if role_tuple[1] in no_xp_roles %}
+                            <option class="dropdown-role" value="{{ role_tuple[1] }}" name="{{ role_tuple[1] }}" selected>{{ role_tuple[0] }}</option>
+                        {% else %}    
+                            <option class="dropdown-role" value="{{ role_tuple[1] }}" name="{{ role_tuple[1] }}" >{{ role_tuple[0] }}</option>
+                        {% endif %}    
+                    {% endfor %}
+                </select>
+                comment: Muted role is by default selected as black listed role( u can change if u want to ) idk why u would want to do that honeslty
+
+
+                    
+            </fieldset>
+            <fieldset id="leveling-config">
+                <legend class="level-config-child"><h3>Leveling Configurations</h3></legend>
+                <!--XP Rate-->
+                <div class="slide-container level-config-child">
+                    <label><h4>Xp Rate</h4></label> 
+                    <input type="range" min="1" max="5.0" value="{{ xp_rate }}" name="xp_rate" action="#" method="post" class="xp-slider" id="xp-slider">
+                    <p>Value: <span id="xp-value"></span></p>
+                    Xp given per minuite:<span>do the math and show it noob</span>
+                    output !!!
+                </div>
+
+                <!--Level - Reward - Action-->
+                <div class="level-config-child">
+                    <label><h4>Level Rewards</h4></label>
+                    <div class="level-reward-action">
+                        <div class="level-config-heading level-child">
+                            <span><h3><strong></strong>Level</strong></h3></span>
+                            <span><h3><strong>Level Roles</strong></h3></span>
+                            <span><buttton type="hidden"></buttton></span>
+                            
+                        </div>
+                        <div class="js-visual" id="js-visual"><!--NO level Child-->
+                            {% if level_reward is not none  %}
+                                {% for i in range(0 , level_reward| length) %}
+                                    <div class="js-display" id="level-{{ level_reward[i][0] }}">
+                                        <input class="display-input" type="text" name="entry{{ level_reward[i][0] }},{{ level_reward[i][0] }}" value="Level {{ level_reward[i][0] }}" readonly="readonly">
+                                        <input class="display-input" type="text" name="entry{{ level_reward[i][0] }},{{ level_reward[i][1]}}" value="{{ level_reward[i][2] }}" readonly="readonly">
+                                        <button type="button" onclick="deleteThisLevelAction('level-{{ level_reward[i][0] }}')" class="level-remove">-Remove</button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %} <!--SORT-->
+                        </div>
+                        <div class="level-child level-notice">
+                            <div id="level-notice"></div>
+
+                        </div>
+                        <div class="level-config-form level-child">
+                            <div class="1-colum">
+                                <input id="level-input" type="number" placeholder="Enter Level for the Reward" min="1" max="100">
+
+                            </div>
+                            <div class="2-colum">
+                                <select  value="no_xp_roles" class="mul-select" id="level-role">
+                                    {% for role_tuple in guild_roles %}
+                                        <option class="dropdown-role" value="{{ role_tuple[1] }}" name="{{ role_tuple[1] }}" >{{ role_tuple[0] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" onclick="createLevelAction()" action="nain" method="none" id="level-add">Add Level</button>
+
+                        Add More actions/Levels 
+                        max hmmm 10 or 15 
+                        for premium 50
+
+                    -------------------------------------------------------------
+                    <select>
+                        Action when one level is increased 
+                    </select>
+                    -Use bootstarp for simple css and add your own css on top of it
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset id="leveling-edit-xp">
+                <legend><h3>Change XP/ Reset XP</h3></legend>
+                Danger Flash 
+                RED
+                RED
+                RED
+
+                Confimation on wether to allow th change the levels of users
+                <br>
+                this perm should only be accessed by users with direct admin permission on their discord acc and maybe even 2fa should be on dk about th2 2fa actually
+                <br>
+                <labeel>Set XP for user/Roles-@everyone</labeel>
+                to reset xp or to set it to zero enter the xp as 0 
+
+                eg to reset xp for everuone selee@everyone and input 0
+                <br>
+
+            </fieldset>
+
+            <fieldset id="leveling-ui">
+                <legend>Leveling User Interface</legend>
+                <label>Rank</label>
+                <label>Leaddboard and url things</label>
+            </fieldset>
+
+            <input type="reset" value="reset">
+            <input type="submit" value="Save Changes">
+        
+
+    </div> <!--./module-body -->
+    Site broken or something 
+    have a proble,?
+    reach us on discord for help
+
+    report issue
+
+    sry for inconvience
+    
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $(".mul-select").select2({
+                placeholder: "Select", //placeholder
+                tags: true,
+                tokenSeparators: ['/',',',';'," "] 
+            });
+        })
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+{% endblock %}
+
+
+
+#fonts and diffrent font size for Heading
+
+#make heading more stand out of the rest
+#svg icons
